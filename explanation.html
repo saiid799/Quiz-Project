@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz Explanation</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="explanation-container">
+  <div id="question">Explanation for the question</div>
+  <div id="explanation">Explanation will go here</div>
+  <button id="goBack" style="margin-top: 1rem;">Go Back</button>
+</div>
+
+<script src="script.js"></script>
+<script>
+  document.getElementById("goBack").addEventListener("click", function() {
+    const previousState = JSON.parse(sessionStorage.getItem("quizState"));
+    if (previousState) {
+      sessionStorage.setItem("currentQuestionIndex", previousState.currentQuestionIndex);
+      sessionStorage.setItem("score", previousState.score);
+      window.history.back(); // Navigate back to the previous page
+    } else {
+      window.location.href = "index.html"; // If there's no previous state, go back to the quiz start page
+    }
+  });
+
+  const queryParams = new URLSearchParams(window.location.search);
+  const questionIndex = parseInt(queryParams.get('index'), 10);
+  if (!isNaN(questionIndex) && questions[questionIndex]) {
+    document.getElementById("question").innerText = questions[questionIndex].question;
+    document.getElementById("explanation").innerText = questions[questionIndex].why;
+  } else {
+    document.getElementById("question").innerText = "Invalid question index.";
+    document.getElementById("explanation").innerText = "Please return to the quiz.";
+  }
+</script>
+</body>
+</html>
